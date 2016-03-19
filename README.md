@@ -1,8 +1,8 @@
 # Sidekiq::Instrumental
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/sidekiq/instrumental`. To experiment with that code, run `bin/console` for an interactive prompt.
+sidekiq-instrumental is a simple gem to record Sidekiq queue stats into [Instrumental](https://instrumentalapp.com/).
 
-TODO: Delete this and the text above, and describe your gem
+This gem is inspired by the [librato-sidekiq](https://github.com/StatusPage/librato-sidekiq/) gem.
 
 ## Installation
 
@@ -22,20 +22,41 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+After you configue Instrumental simply configure Sidekiq::Instrumental with the reference to your agent object.
 
-## Development
+```ruby
+I = Instrumental::Agent.new(
+    ENV['INSTRUMENTAL_KEY'],
+    enabled: ENV['INSTRUMENTAL_KEY'].present?
+)
+# now tell Sidekiq::Instrumental what agent connection to use
+Sidekiq::Instrumental.configure do |config|
+  config.instrumental_agent = I
+end
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake rspec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+## Configuration
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+**NOTE** Make all configuration changes through the `.configure` block.
+
+enabled: Boolean, true by default
+
+**instrumental_agent**: the Instrumental::Agent instance to use to submit metrics 
+
+**enabled**: Boolean, true by default
+
+**whitelist_queues**: Array, list of queue names that will be the only ones sent to Instrumental (optional)
+
+**blacklist_queues**: Array, list of queue names that will not be sent to Instrumental (optional)
+
+**whitelist_classes**: Array, list of worker classes that will be the only ones sent to Instrumental (optional)
+
+**blacklist_classes**: Array, list of worker classes that will not be sent to Instrumental (optional)
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/sidekiq-instrumental. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](contributor-covenant.org) code of conduct.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/NetsoftHoldings/sidekiq-instrumental.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
