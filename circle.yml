@@ -1,0 +1,6 @@
+machine:
+  ruby:
+    version: 2.1.5
+test:
+  post:
+    - gem build sidekiq_instrumental.gemspec
