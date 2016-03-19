@@ -1,6 +1,17 @@
 machine:
   ruby:
     version: 2.1.5
+dependencies:
+  post:
+    - gem install geminabox
 test:
   post:
-    - gem build sidekiq_instrumental.gemspec
+    - gem build sidekiq-instrumental.gemspec
+    - rm -rf pkg
+    - mkdir -p pkg
+    - mv *.gem pkg
+deployment:
+  production:
+    branch: production
+    commands:
+      - gem inabox -g ${HUBSTAFF_GEM_SERVER}
