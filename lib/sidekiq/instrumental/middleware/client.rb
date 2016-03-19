@@ -7,7 +7,7 @@ module Sidekiq
 
           increment('sidekiq.queued')
 
-          #return unless config.allowed_to_submit queue, worker_instance
+          return unless config.allowed_to_submit queue, worker_instance
 
           base_key = "sidekiq.#{queue.to_s}."
           increment(base_key + 'queued')

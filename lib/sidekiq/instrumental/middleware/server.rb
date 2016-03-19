@@ -7,7 +7,7 @@ module Sidekiq
         def track(stats, worker_instance, msg, queue, elapsed)
           submit_general_stats(stats)
 
-          #return unless config.allowed_to_submit queue, worker_instance
+          return unless config.allowed_to_submit queue, worker_instance
 
           base_key = "sidekiq.#{queue.to_s}."
 
