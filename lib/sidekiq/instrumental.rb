@@ -24,6 +24,10 @@ module Sidekiq
           chain.remove Sidekiq::Instrumental::Middleware::Server
           chain.add Sidekiq::Instrumental::Middleware::Server, new_config
         end
+        config.client_middleware do |chain|
+          chain.remove Sidekiq::Instrumental::Middleware::Client
+          chain.add Sidekiq::Instrumental::Middleware::Client, new_config
+        end
       end
 
       ::Sidekiq.configure_client do |config|
