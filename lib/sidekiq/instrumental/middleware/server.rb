@@ -14,6 +14,7 @@ module Sidekiq
           increment(base_key + 'processed')
           gauge(base_key + 'time', elapsed)
           gauge(base_key + 'enqueued', stats.queues[queue].to_i)
+          guage(base_key + 'latency', Sidekiq::Queue.new(queue.to_s).latency)
           base_key += msg['class'].underscore.gsub('/', '_') + '.'
 
           increment(base_key + 'processed')
