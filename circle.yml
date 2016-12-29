@@ -1,6 +1,6 @@
 machine:
   ruby:
-    version: 2.1.5
+    version: 2.2.5
 dependencies:
   post:
     - gem install geminabox
@@ -11,7 +11,7 @@ test:
     - mkdir -p pkg
     - mv *.gem pkg
 deployment:
-  production:
-    branch: production
+  release:
+    tag: /v[0-9]+(\.[0-9]+)+/
     commands:
       - gem inabox -g ${HUBSTAFF_GEM_SERVER}
