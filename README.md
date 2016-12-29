@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/sidekiq-instrumental.svg)](https://badge.fury.io/rb/sidekiq-instrumental)
+
 # Sidekiq::Instrumental
 
 sidekiq-instrumental is a simple gem to record Sidekiq queue stats into [Instrumental](https://instrumentalapp.com/).
