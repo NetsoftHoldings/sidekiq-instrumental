@@ -3,6 +3,9 @@
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 require 'simplecov'
 require 'sidekiq/instrumental'
+require 'timecop'
+
+Timecop.safe_mode = true
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
