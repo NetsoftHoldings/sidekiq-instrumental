@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Sidekiq::Instrumental do
@@ -8,7 +10,8 @@ RSpec.describe Sidekiq::Instrumental do
   describe '::config' do
     describe '::config' do
       it 'should return a Configuration object' do
-        expect(described_class.config).to be_an_instance_of(described_class::Configuration)
+        expect(described_class.config)
+          .to be_an_instance_of(described_class::Configuration)
       end
     end
   end
@@ -22,7 +25,8 @@ RSpec.describe Sidekiq::Instrumental do
     end
 
     it 'should yield the configuration object' do
-      expect { |b| described_class.configure(&b) }.to yield_with_args(described_class.config)
+      expect { |b| described_class.configure(&b) }
+        .to yield_with_args(described_class.config)
     end
   end
 
@@ -39,8 +43,13 @@ RSpec.describe Sidekiq::Instrumental do
         allow(config).to receive(:client_middleware)
         allow(Sidekiq).to receive(:configure_server).and_yield(config)
 
-        expect(server_chain).to receive(:remove).with(described_class::Middleware::Server)
-        expect(server_chain).to receive(:add).with(described_class::Middleware::Server, an_instance_of(described_class::Configuration))
+        expect(server_chain).to receive(:remove)
+                                  .with(described_class::Middleware::Server)
+        expect(server_chain).to receive(:add)
+                                  .with(described_class::Middleware::Server,
+                                        an_instance_of(
+                                          described_class::Configuration
+                                        ))
 
         described_class.register
       end
@@ -52,8 +61,13 @@ RSpec.describe Sidekiq::Instrumental do
         allow(config).to receive(:client_middleware).and_yield(client_chain)
         allow(Sidekiq).to receive(:configure_server).and_yield(config)
 
-        expect(client_chain).to receive(:remove).with(described_class::Middleware::Client)
-        expect(client_chain).to receive(:add).with(described_class::Middleware::Client, an_instance_of(described_class::Configuration))
+        expect(client_chain).to receive(:remove)
+                                  .with(described_class::Middleware::Client)
+        expect(client_chain).to receive(:add)
+                                  .with(described_class::Middleware::Client,
+                                        an_instance_of(
+                                          described_class::Configuration
+                                        ))
 
         described_class.register
       end
@@ -66,8 +80,13 @@ RSpec.describe Sidekiq::Instrumental do
         allow(config).to receive(:client_middleware).and_yield(client_chain)
         allow(Sidekiq).to receive(:configure_client).and_yield(config)
 
-        expect(client_chain).to receive(:remove).with(described_class::Middleware::Client)
-        expect(client_chain).to receive(:add).with(described_class::Middleware::Client, an_instance_of(described_class::Configuration))
+        expect(client_chain).to receive(:remove)
+                                  .with(described_class::Middleware::Client)
+        expect(client_chain).to receive(:add)
+                                  .with(described_class::Middleware::Client,
+                                        an_instance_of(
+                                          described_class::Configuration
+                                        ))
 
         described_class.register
       end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 RSpec.describe Sidekiq::Instrumental::Configuration do
@@ -59,23 +61,38 @@ RSpec.describe Sidekiq::Instrumental::Configuration do
         expect(subject.send(method, 'other')).to eq(false)
       end
     end
-
   end
 
   describe '#queue_in_whitelist' do
-    include_examples 'whitelist checks', :whitelist_queues, :queue_in_whitelist, ['default'], 'default'
+    include_examples 'whitelist checks',
+                     :whitelist_queues,
+                     :queue_in_whitelist,
+                     ['default'],
+                     'default'
   end
 
   describe '#queue_in_blacklist' do
-    include_examples 'blacklist checks', :blacklist_queues, :queue_in_blacklist, ['default'], 'default'
+    include_examples 'blacklist checks',
+                     :blacklist_queues,
+                     :queue_in_blacklist,
+                     ['default'],
+                     'default'
   end
 
   describe '#class_in_whitelist' do
-    include_examples 'whitelist checks', :whitelist_classes, :class_in_whitelist, ['Array'], []
+    include_examples 'whitelist checks',
+                     :whitelist_classes,
+                     :class_in_whitelist,
+                     ['Array'],
+                     []
   end
 
   describe '#class_in_blacklist' do
-    include_examples 'blacklist checks', :blacklist_classes, :class_in_blacklist, ['Array'], []
+    include_examples 'blacklist checks',
+                     :blacklist_classes,
+                     :class_in_blacklist,
+                     ['Array'],
+                     []
   end
 
   describe '#allowed_to_submit' do
