@@ -111,6 +111,9 @@ jobs:
           name: RSpec
           command: bundle exec rspec
       - run:
+          name: Rubocop
+          command: bundle exec rubocop
+      - run:
           name: Build gem
           command: |-
             gem build *.gemspec

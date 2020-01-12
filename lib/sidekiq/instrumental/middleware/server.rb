@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 module Sidekiq
   module Instrumental
     module Middleware
+      # Server side sidekiq middleware
       class Server < Base
         protected
 
@@ -9,7 +12,7 @@ module Sidekiq
 
           return unless config.allowed_to_submit queue, worker_instance
 
-          base_key = "sidekiq.#{queue.to_s}."
+          base_key = "sidekiq.#{queue}."
 
           increment(base_key + 'processed')
           gauge(base_key + 'time', elapsed)
@@ -22,13 +25,13 @@ module Sidekiq
         end
 
         def submit_general_stats(stats)
-          increment("sidekiq.processed")
+          increment('sidekiq.processed')
           {
-              enqueued: nil,
-              failed: nil,
-              scheduled_size: 'scheduled'
+            enqueued: nil,
+            failed: nil,
+            scheduled_size: 'scheduled'
           }.each do |method, name|
-            gauge("sidekiq.#{(name || method).to_s}", stats.send(method).to_i)
+            gauge("sidekiq.#{(name || method)}", stats.send(method).to_i)
           end
         end
       end

@@ -1,4 +1,6 @@
-require "sidekiq/instrumental/version"
+# frozen_string_literal: true
+
+require 'sidekiq/instrumental/version'
 require 'sidekiq/instrumental/configuration'
 require 'sidekiq/instrumental/middleware/base'
 require 'sidekiq/instrumental/middleware/client'
@@ -6,18 +8,18 @@ require 'sidekiq/instrumental/middleware/server'
 require 'sidekiq'
 
 module Sidekiq
-  module Instrumental
+  module Instrumental # :nodoc:
     def self.config
       @config ||= Sidekiq::Instrumental::Configuration.new
     end
 
     def self.configure
-      yield self.config if block_given?
-      self.register
+      yield config if block_given?
+      register
     end
 
     def self.register
-      new_config = self.config.dup
+      new_config = config.dup
 
       ::Sidekiq.configure_server do |config|
         config.server_middleware do |chain|

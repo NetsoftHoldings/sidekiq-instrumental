@@ -1,15 +1,16 @@
+# frozen_string_literal: true
+
 module Sidekiq
   module Instrumental
     module Middleware
+      # Client side sidekiq middleware
       class Client < Base
-
-        def track(stats, worker_instance, msg, queue, elapsed)
-
+        def track(_stats, worker_instance, msg, queue, _elapsed)
           increment('sidekiq.queued')
 
           return unless config.allowed_to_submit queue, worker_instance
 
-          base_key = "sidekiq.#{queue.to_s}."
+          base_key = "sidekiq.#{queue}."
           increment(base_key + 'queued')
 
           base_key += msg['class'].underscore.gsub('/', '_') + '.'

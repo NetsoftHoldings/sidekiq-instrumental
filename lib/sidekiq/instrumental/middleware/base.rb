@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 require 'sidekiq/api'
 
 module Sidekiq
   module Instrumental
     module Middleware
+      # Shared base code for measuring stats for server and client sidekiq
       class Base
         attr_reader :config
 
@@ -10,14 +13,19 @@ module Sidekiq
           @config = config
         end
 
-        def call(worker_instance, msg, queue, redis_pool = nil)
+        def call(worker_instance, msg, queue, _redis_pool = nil)
           start_time = Time.now
           result = yield
           elapsed = (Time.now - start_time).to_f
 
           return result unless config.enabled?
 
-          track(::Sidekiq::Stats.new, worker_instance, msg, queue, elapsed)
+          track(
+            ::Sidekiq::Stats.new,
+            worker_instance,
+            ::Sidekiq::Job.new(msg),
+            queue, elapsed
+          )
 
           result
         end
@@ -25,11 +33,11 @@ module Sidekiq
         protected
 
         def increment(*args)
-          config.I.increment *args
+          config.I.increment(*args)
         end
 
         def gauge(*args)
-          config.I.gauge *args
+          config.I.gauge(*args)
         end
       end
     end
