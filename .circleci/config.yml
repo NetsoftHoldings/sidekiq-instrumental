@@ -123,6 +123,9 @@ jobs:
       - attach_workspace:
           at: .
       - run:
+          name: Install bundler
+          command: gem install bundler --version=$BUNDLE_VERSION
+      - run:
           name: Deploy to gem server
           command: |-
             ./bin/tag_check.sh
