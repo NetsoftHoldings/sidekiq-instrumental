@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 ### Changed
 ### Fixed
+
+## [0.3.1]
+### Fixed
 - class name calculation needs to filter out unsupported characters by instrumental
 
 ## [0.3.0]
