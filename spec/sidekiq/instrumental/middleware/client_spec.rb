@@ -38,6 +38,41 @@ RSpec.describe Sidekiq::Instrumental::Middleware::Client do
     subject
   end
 
+  describe 'metric naming' do
+    context 'when the class name contains unsupported characters' do
+      let(:msg) { { 'class' => 'MyMailer#message/fun' } }
+
+      it 'changes them to _' do
+        expect(middleware).to receive(:increment)
+                                .with("sidekiq.#{queue}.my_mailer_message_fun.queued")
+
+        subject
+      end
+    end
+
+    context 'when the class name causes more then one . in a row' do
+      let(:msg) { { 'class' => 'MyMailer..message' } }
+
+      it 'combines them to one' do
+        expect(middleware).to receive(:increment)
+                                .with("sidekiq.#{queue}.my_mailer.message.queued")
+
+        subject
+      end
+    end
+
+    context 'trims a trailing .' do
+      let(:msg) { { 'class' => 'MyMailer#message.' } }
+
+      it 'combines them to one' do
+        expect(middleware).to receive(:increment)
+                                .with("sidekiq.#{queue}.my_mailer_message.queued")
+
+        subject
+      end
+    end
+  end
+
   it 'calls display_class to get the class name' do
     expect_any_instance_of(::Sidekiq::Job)
       .to receive(:display_class).and_call_original

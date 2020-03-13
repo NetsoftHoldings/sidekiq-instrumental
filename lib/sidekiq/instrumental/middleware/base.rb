@@ -39,6 +39,14 @@ module Sidekiq
         def gauge(*args)
           config.I.gauge(*args)
         end
+
+        def build_class_key(klass_name)
+          key = klass_name.underscore
+                  .gsub(/[^\d\w\-_\.]/, '_')
+                  .gsub(/\.{2,}/, '.')
+          key.chomp!('.') while key[-1] == '.'
+          key
+        end
       end
     end
   end

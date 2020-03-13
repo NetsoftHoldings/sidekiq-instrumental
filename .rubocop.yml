@@ -2,5 +2,7 @@ AllCops:
   TargetRubyVersion: 2.3
 Layout/MultilineMethodCallIndentation:
   EnforcedStyle: indented_relative_to_receiver
+Layout/LineLength:
+  Max: 90
 Metrics:
   Enabled: false
