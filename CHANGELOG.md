@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.3.3]
+### Fixed
+- Fix unwrap_class_name, it was wrongly expecting an instance not a class.
+
 ## [0.3.2]
 ### Added
 - Implement a custom version of Sidekiq's display\_class\_name that fix an issues with ActiveJob > 6 when the job's class is passed as class not String
