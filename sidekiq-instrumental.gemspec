@@ -24,10 +24,10 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 2.3'
 
   spec.add_runtime_dependency 'instrumental_agent', '>= 0.13'
-  spec.add_runtime_dependency 'sidekiq', '>= 3.5'
+  spec.add_runtime_dependency 'sidekiq', '< 6.0'
 
   spec.add_development_dependency 'activesupport', '~> 5.0'
-  spec.add_development_dependency 'bundler', '~> 1.9'
+  spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'rake', '>= 10.0'
   spec.add_development_dependency 'rspec', '~> 3.4'
   spec.add_development_dependency 'simplecov', '~> 0.11'
