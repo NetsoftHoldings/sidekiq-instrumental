@@ -13,7 +13,8 @@ module Sidekiq
           base_key = "sidekiq.#{queue}."
           increment(base_key + 'queued')
 
-          base_key += build_class_key(msg.display_class) + '.'
+          display_class = unwrap_class_name(msg)
+          base_key += build_class_key(display_class) + '.'
 
           increment(base_key + 'queued')
         end

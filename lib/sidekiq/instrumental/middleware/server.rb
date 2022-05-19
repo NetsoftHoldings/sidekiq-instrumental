@@ -18,7 +18,9 @@ module Sidekiq
           gauge(base_key + 'time', elapsed)
           gauge(base_key + 'enqueued', stats.queues[queue].to_i)
           gauge(base_key + 'latency', Sidekiq::Queue.new(queue.to_s).latency)
-          base_key += build_class_key(msg.display_class) + '.'
+
+          display_class = unwrap_class_name(msg)
+          base_key += build_class_key(display_class) + '.'
 
           increment(base_key + 'processed')
           gauge(base_key + 'time', elapsed)
