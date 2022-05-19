@@ -2,8 +2,6 @@
 
 require 'spec_helper'
 
-require 'active_support/core_ext/string/inflections'
-
 RSpec.describe Sidekiq::Instrumental::Middleware::Client do
   let(:config) { Sidekiq::Instrumental::Configuration.new }
   let(:middleware) { described_class.new(config) }

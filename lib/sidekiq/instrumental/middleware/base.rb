@@ -41,11 +41,23 @@ module Sidekiq
         end
 
         def build_class_key(klass_name)
-          key = klass_name.underscore
+          key = underscore(klass_name)
                   .gsub(/[^\d\w\-_\.]/, '_')
                   .gsub(/\.{2,}/, '.')
           key.chomp!('.') while key[-1] == '.'
           key
+        end
+
+        # Borrowed from active support so we do not depend on it.
+        def underscore(camel_cased_word)
+          return camel_cased_word unless /[A-Z-]|::/.match?(camel_cased_word)
+
+          word = camel_cased_word.to_s.gsub('::', '/')
+          word.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
+          word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
+          word.tr!('-', '_')
+          word.downcase!
+          word
         end
 
         # Returns the human-friendly class name, if its a known wrapper we unwrap it.
