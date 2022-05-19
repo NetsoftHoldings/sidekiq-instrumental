@@ -156,7 +156,7 @@ RSpec.describe Sidekiq::Instrumental::Middleware::Server do
     end
 
     context "when sidekiq's wrapped class is set as a Class" do
-      let(:wrapped_class) { stub_const('ActionMailer::DeliveryJob', Class.new).new }
+      let(:wrapped_class) { stub_const('ActionMailer::DeliveryJob', Class.new) }
 
       it 'unwraps the class name and increments the metric' do
         expect(middleware)

@@ -70,7 +70,7 @@ module Sidekiq
           display_class = job.display_class
 
           if %w[ActionMailer::DeliveryJob ActionMailer::MailDeliveryJob]
-               .include?(display_class.class.name)
+               .include?(display_class.to_s)
             # The class name was not unwrapped correctly by the +display_class+ method
             job.args[0]['arguments'][0..1].join('#')
           else
