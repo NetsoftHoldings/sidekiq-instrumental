@@ -1,0 +1,39 @@
+---
+name: CI PR Builds
+'on':
+  push:
+    branches:
+      - master
+  pull_request:
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby:
+          - '2.5'
+          - '2.7'
+        sidekiq:
+          - '4'
+          - '5'
+    env:
+      BUNDLE_GEMFILE: "${{ github.workspace }}/gemfiles/Gemfile.sidekiq${{ matrix.sidekiq }}"
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "${{ matrix.ruby }}"
+          bundler-cache: true
+      - name: Run bundle update
+        run: bundle update
+      - name: Run tests
+        run: bundle exec rake spec
+      - name: Rubocop
+        run: bundle exec rubocop
+      - name: Build gem
+        run: gem build *.gemspec
