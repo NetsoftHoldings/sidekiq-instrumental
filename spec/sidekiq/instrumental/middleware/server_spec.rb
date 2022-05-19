@@ -135,4 +135,38 @@ RSpec.describe Sidekiq::Instrumental::Middleware::Server do
 
     subject
   end
+
+  describe 'Unwrap sidekiq job class name' do
+    let(:msg) do
+      {
+        'class' => 'ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper',
+        'wrapped' => wrapped_class,
+        'args' => [{ 'arguments' => %w[UserMailer confirm_account deliver_now User] }]
+      }
+    end
+
+    context "when sidekiq's wrapped class is set as a String" do
+      let(:wrapped_class) { 'ActionMailer::DeliveryJob' }
+
+      it 'unwraps the class name and increments the metric' do
+        expect(middleware)
+          .to receive(:increment)
+                .with("sidekiq.#{queue}.user_mailer_confirm_account.processed")
+
+        subject
+      end
+    end
+
+    context "when sidekiq's wrapped class is set as a Class" do
+      let(:wrapped_class) { stub_const('ActionMailer::DeliveryJob', Class.new).new }
+
+      it 'unwraps the class name and increments the metric' do
+        expect(middleware)
+          .to receive(:increment)
+                .with("sidekiq.#{queue}.user_mailer_confirm_account.processed")
+
+        subject
+      end
+    end
+  end
 end
