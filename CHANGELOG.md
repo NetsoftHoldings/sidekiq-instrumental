@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Changed
 ### Fixed
 
+## [0.3.4]
+### Fixed
+- cover multiple possible returns types of display_class
+
 ## [0.3.3]
 ### Fixed
 - Fix unwrap_class_name, it was wrongly expecting an instance not a class.
