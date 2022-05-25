@@ -74,7 +74,7 @@ module Sidekiq
             # The class name was not unwrapped correctly by the +display_class+ method
             job.args[0]['arguments'][0..1].join('#')
           else
-            display_class
+            display_class.to_s
           end
         end
       end

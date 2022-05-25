@@ -69,6 +69,16 @@ RSpec.describe Sidekiq::Instrumental::Middleware::Client do
         subject
       end
     end
+
+    context 'when the class is not passed as a string' do
+      let(:msg) { { 'class' => stub_const('MyClassName', Class.new) } }
+
+      it 'increments the queued metric for the queue' do
+        expect(middleware).to receive(:increment).with("sidekiq.#{queue}.queued")
+
+        subject
+      end
+    end
   end
 
   it 'calls display_class to get the class name' do
@@ -89,32 +99,66 @@ RSpec.describe Sidekiq::Instrumental::Middleware::Client do
     let(:msg) do
       {
         'class' => 'ActiveJob::QueueAdapters::SidekiqAdapter::JobWrapper',
-        'wrapped' => wrapped_class,
-        'args' => [{ 'arguments' => %w[UserMailer confirm_account deliver_now User] }]
+        'wrapped' => passed_class,
+        'args' => args
       }
     end
+    let(:args) { [] }
 
-    context "when sidekiq's wrapped class is set as a String" do
-      let(:wrapped_class) { 'ActionMailer::DeliveryJob' }
+    context "when sidekiq's wrapped class is a mail delivery job" do
+      let(:wrapped_class) { stub_const('ActionMailer::DeliveryJob', Class.new) }
+      let(:args) { [{ 'arguments' => %w[UserMailer confirm_account deliver_now User] }] }
 
-      it 'unwraps the class name and increments the metric' do
-        expect(middleware)
-          .to receive(:increment)
-                .with("sidekiq.#{queue}.user_mailer_confirm_account.queued")
+      context 'when passed as a String' do
+        let(:passed_class) { wrapped_class.to_s }
 
-        subject
+        it 'unwraps the class name and increments the metric' do
+          expect(middleware)
+            .to receive(:increment)
+                  .with("sidekiq.#{queue}.user_mailer_confirm_account.queued")
+
+          subject
+        end
+      end
+
+      context 'when passed as a Class' do
+        let(:passed_class) { wrapped_class }
+
+        it 'unwraps the class name and increments the metric' do
+          expect(middleware)
+            .to receive(:increment)
+                  .with("sidekiq.#{queue}.user_mailer_confirm_account.queued")
+
+          subject
+        end
       end
     end
 
-    context "when sidekiq's wrapped class is set as a Class" do
-      let(:wrapped_class) { stub_const('ActionMailer::DeliveryJob', Class.new) }
+    context "when sidekiq's wrapped class is not a mail delivery job" do
+      let(:wrapped_class) { stub_const('Jobs::Job', Class.new) }
 
-      it 'unwraps the class name and increments the metric' do
-        expect(middleware)
-          .to receive(:increment)
-                .with("sidekiq.#{queue}.user_mailer_confirm_account.queued")
+      context 'when passed as a String' do
+        let(:passed_class) { wrapped_class.to_s }
 
-        subject
+        it 'unwraps the class name and increments the metric' do
+          expect(middleware)
+            .to receive(:increment)
+                  .with("sidekiq.#{queue}.jobs_job.queued")
+
+          subject
+        end
+      end
+
+      context 'when passed as a Class' do
+        let(:passed_class) { wrapped_class }
+
+        it 'unwraps the class name and increments the metric' do
+          expect(middleware)
+            .to receive(:increment)
+                  .with("sidekiq.#{queue}.jobs_job.queued")
+
+          subject
+        end
       end
     end
   end
