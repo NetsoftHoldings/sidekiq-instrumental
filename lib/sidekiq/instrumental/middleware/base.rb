@@ -32,6 +32,10 @@ module Sidekiq
 
         protected
 
+        def push_metrics
+          config.I.push
+        end
+
         def increment(*args)
           config.I.increment(*args)
         end
