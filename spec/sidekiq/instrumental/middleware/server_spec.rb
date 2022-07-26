@@ -21,6 +21,7 @@ RSpec.describe Sidekiq::Instrumental::Middleware::Server do
     allow(config).to receive(:enabled?).and_return(true)
     allow(middleware).to receive(:increment)
     allow(middleware).to receive(:gauge)
+    allow(middleware).to receive(:push_metrics)
     allow(::Sidekiq::Stats).to receive(:new).and_return(sidekiq_stats)
     allow(::Sidekiq::Queue).to receive(:new).and_return(sidekiq_queue)
   end

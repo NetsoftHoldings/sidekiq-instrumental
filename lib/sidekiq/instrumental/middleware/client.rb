@@ -6,15 +6,15 @@ module Sidekiq
       # Client side sidekiq middleware
       class Client < Base
         def track(_stats, worker_instance, msg, queue, _elapsed)
-          increment('sidekiq_queued')
+          increment('sidekiq.queued')
 
           return unless config.allowed_to_submit queue, worker_instance
 
-          base_key = "sidekiq_#{queue}_"
+          base_key = "sidekiq.#{queue}."
           increment(base_key + 'queued')
 
           display_class = unwrap_class_name(msg)
-          base_key += build_class_key(display_class) + '_'
+          base_key += build_class_key(display_class) + '.'
 
           increment(base_key + 'queued')
           push_metrics

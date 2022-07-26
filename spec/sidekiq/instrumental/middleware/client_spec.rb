@@ -13,6 +13,7 @@ RSpec.describe Sidekiq::Instrumental::Middleware::Client do
   before do
     allow(config).to receive(:enabled?).and_return(true)
     allow(middleware).to receive(:increment)
+    allow(middleware).to receive(:push_metrics)
     allow(::Sidekiq::Stats).to receive(:new).and_return(sidekiq_stats)
   end
 

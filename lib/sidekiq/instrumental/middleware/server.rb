@@ -12,7 +12,7 @@ module Sidekiq
 
           return unless config.allowed_to_submit queue, worker_instance
 
-          base_key = "sidekiq_#{queue}_"
+          base_key = "sidekiq.#{queue}."
 
           increment(base_key + 'processed')
           gauge(base_key + 'time', elapsed)
@@ -20,7 +20,7 @@ module Sidekiq
           gauge(base_key + 'latency', Sidekiq::Queue.new(queue.to_s).latency)
 
           display_class = unwrap_class_name(msg)
-          base_key += build_class_key(display_class) + '_'
+          base_key += build_class_key(display_class) + '.'
 
           increment(base_key + 'processed')
           gauge(base_key + 'time', elapsed)
@@ -29,13 +29,13 @@ module Sidekiq
         end
 
         def submit_general_stats(stats)
-          increment('sidekiq_processed')
+          increment('sidekiq.processed')
           {
             enqueued: nil,
             failed: nil,
             scheduled_size: 'scheduled'
           }.each do |method, name|
-            gauge("sidekiq_#{(name || method)}", stats.send(method).to_i)
+            gauge("sidekiq.#{(name || method)}", stats.send(method).to_i)
           end
         end
       end
