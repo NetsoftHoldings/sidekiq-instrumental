@@ -2,6 +2,6 @@
 
 module Sidekiq
   module Instrumental
-    VERSION = '0.3.5'
+    VERSION = '0.3.5.test'
   end
 end
